@@ -1,0 +1,14 @@
+@import "~normalize.css";
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
+
+* {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+body {
+  //background-image: linear-gradient(to right top, #fc7804, #f86a04, #f45c05, #f04c09, #eb3a0d, #e52a20, #de192c, #d50035, #c40046, #af0053, #96005b, #7b0460);
+}
