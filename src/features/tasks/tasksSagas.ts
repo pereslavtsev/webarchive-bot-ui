@@ -23,6 +23,7 @@ function* handleFetchTasks() {
               node {
                 id
                 pageId
+                pageTitle
                 status
                 createdAt
                 updatedAt

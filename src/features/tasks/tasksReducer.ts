@@ -1,5 +1,5 @@
 import { CounterState } from '../counter/counterSlice';
-import { createReducer, createSlice } from '@reduxjs/toolkit';
+import { createAction, createReducer, createSlice } from '@reduxjs/toolkit';
 import { fetchTasks } from './tasksRoutines';
 import { RootState } from '../../app/store';
 
@@ -13,8 +13,27 @@ const initialState: TasksState = {
   loading: false,
 };
 
+export const taskAdded = createAction('TASK_ADDED');
+export const taskUpdated = createAction('TASK_UPDATED');
+
 const tasksReducer = createReducer(initialState, (builder) =>
   builder
+    .addCase(taskAdded, (state, action) => {
+      if (!state.data) {
+        state.data = [action.payload];
+        return;
+      }
+      state.data.push(action.payload);
+    })
+    .addCase(taskUpdated, (state, action) => {
+      if (!state.data) {
+        state.data = [action.payload];
+        return;
+      }
+      // @ts-ignore
+      const i = state.data.findIndex((task) => task.id === action.payload.id);
+      state.data[i] = action.payload;
+    })
     .addCase(fetchTasks.REQUEST, (state, action) => {
       state.loading = true;
     })

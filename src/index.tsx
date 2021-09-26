@@ -6,15 +6,17 @@ import { store } from './app/store';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import { FocusStyleManager } from '@blueprintjs/core';
+import { ApolloProvider } from '@apollo/client';
+import client from './app/client';
 
 FocusStyleManager.onlyShowFocusOnTabs();
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
+  <Provider store={store}>
+    <ApolloProvider client={client}>
       <App />
-    </Provider>
-  </React.StrictMode>,
+    </ApolloProvider>
+  </Provider>,
   document.getElementById('root')
 );
 

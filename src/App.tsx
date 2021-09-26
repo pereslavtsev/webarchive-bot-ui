@@ -7,10 +7,6 @@ function App() {
     <>
       <AppNavbar />
       <TasksTable />
-      {/*<FormGroup*/}
-      {/*>*/}
-      {/*  <InputGroup id="text-input" placeholder="Placeholder text" />*/}
-      {/*</FormGroup>*/}
     </>
   );
 }

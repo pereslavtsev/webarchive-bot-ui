@@ -1,10 +1,10 @@
-import { Tag } from '@blueprintjs/core';
 import React from 'react';
-import { selectTasks } from './tasksReducer';
+import { selectTasks, taskAdded, taskUpdated } from './tasksReducer';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Column, useTable } from 'react-table';
 import { fetchTasks } from './tasksRoutines';
 import TaskStatusTag from './TaskStatusTag';
+import { gql, useSubscription } from '@apollo/client';
 
 export const TasksTable = () => {
   const data = useAppSelector(selectTasks);
@@ -12,7 +12,7 @@ export const TasksTable = () => {
     () => [
       {
         Header: 'Title',
-        accessor: 'pageId',
+        accessor: 'pageTitle',
       },
       {
         Header: 'Archived',
@@ -43,7 +43,47 @@ export const TasksTable = () => {
   const dispatch = useAppDispatch();
   React.useEffect(() => {
     dispatch(fetchTasks());
+    //dispatch(subscribeOnTaskAdded());
   }, [dispatch]);
+  const x = useSubscription(
+    gql`
+      subscription taskAdded {
+        taskAdded {
+          id
+          pageId
+          pageTitle
+          status
+          status
+          createdAt
+          updatedAt
+        }
+      }
+    `
+  );
+  const y = useSubscription(
+    gql`
+      subscription taskUpdated {
+        taskUpdated {
+          id
+          pageId
+          pageTitle
+          status
+          status
+          createdAt
+          updatedAt
+        }
+      }
+    `
+  );
+  React.useEffect(() => {
+    // @ts-ignore
+    x?.data?.taskAdded && dispatch(taskAdded(x.data.taskAdded));
+  }, [dispatch, x.data]);
+  React.useEffect(() => {
+    // @ts-ignore
+    y?.data?.taskUpdated && dispatch(taskUpdated(y.data.taskUpdated));
+  }, [dispatch, y, y.data]);
+
   const { getTableProps, getTableBodyProps, headers, rows, prepareRow } =
     useTable({
       columns,
@@ -51,7 +91,8 @@ export const TasksTable = () => {
     });
   return (
     <table
-      className="bp4-html-table bp4-html-table-bordered bp4-html-table-condensed bp4-html-table-striped bp4-interactive"
+      width="100%"
+      className="bp3-html-table bp3-html-table-bordered bp3-html-table-condensed bp3-html-table-striped bp3-interactive"
       {...getTableProps()}
     >
       <thead>
